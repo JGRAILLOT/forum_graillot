@@ -10,6 +10,7 @@ import PostPage from "./PostPage";
 import UserPage from "./UserPage";
 import SignUpPage from "./SignUpPage";
 import ProfilePage from "./ProfilePage";
+import Footer from "./Footer";
 
 const App = () => {
   return (
@@ -17,7 +18,6 @@ const App = () => {
       <div>
         <Header />
 
-        {/* Use the Routes component to define your application's routes */}
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/create" element={<CreatePage />} />
@@ -28,6 +28,8 @@ const App = () => {
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/profilepage" element={<ProfilePage />} />
         </Routes>
+
+        <Footer />
       </div>
     </Router>
   );

@@ -27,21 +27,31 @@ const Header = () => {
 
   const renderAuthOptions = () => {
     if (!userId) {
-      // User is not authenticated
       return (
         <>
-          <Link to="/signup">Signup</Link>
-          <Link to="/login">Login</Link>
+          <p id="header">
+            <Link to="/signup">Signup</Link>
+          </p>
+          <p id="header">
+            <Link to="/login">Login</Link>
+          </p>
         </>
       );
     } else {
-      // User is authenticated
       return (
         <>
-          <Link to="/create">Create Page</Link>
+          <p id="header">
+            <Link to="/create">Create Page</Link>
+          </p>
           <LogoutButton />
-          <Link to="/profilepage">Profile Page</Link>
-          {isAdmin && <Link to="/userTable">User Table</Link>}
+          <p id="header">
+            <Link to="/profilepage">Profile Page</Link>
+          </p>
+          {isAdmin && (
+            <p id="header">
+              <Link to="/userTable">User Table</Link>
+            </p>
+          )}
         </>
       );
     }

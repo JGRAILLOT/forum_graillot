@@ -8,10 +8,8 @@ const LogoutButton = () => {
 
   const handleLogout = () => {
     deleteCookie("user_forum");
-
     navigate("/");
-
-    console.log("Logout successful!");
+    window.location.reload();
   };
 
   return <button onClick={handleLogout}>Logout</button>;

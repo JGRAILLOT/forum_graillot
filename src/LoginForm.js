@@ -1,40 +1,39 @@
 // LoginForm.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import makeRequest from "./Api";
-import { setCookie } from "./Cookie";
+import { setCookie, getCookie } from "./Cookie";
 
-const LoginForm = ({ onLogin }) => {
+const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
+  useEffect(() => {
+    const userId = getCookie("user_forum");
+    if (userId) {
+      navigate("/");
+    }
+  }, [navigate]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
     try {
-      // Make a POST request to your authentication endpoint
       const response = await makeRequest("POST", "/login", {
         username,
         password,
       });
+      console.log(response.userId);
+      const data = await makeRequest("GET", `/users/${response.userId}`);
 
-      // Assuming your backend returns a user object on successful login
-      const user = response.user;
-
-      // Check if the user is disabled
-      if (user.disabled) {
+      if (data.user.disabled) {
         console.log("User is disabled.");
-        // You may want to display an error message or perform other actions
         return;
       }
-
-      // Save user information in a cookie or state if needed
-      setCookie("user_forum", user._id);
-
-      // Call the onLogin callback provided by the parent component, if needed
-      onLogin(user);
+      setCookie("user_forum", response.userId);
+      window.location.reload();
     } catch (error) {
       console.error("Error during login:", error.message);
-      // Handle login error (e.g., display an error message)
     }
   };
 
