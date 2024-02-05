@@ -47,15 +47,15 @@ function PostEditor({ postId }) {
 
     const registerVisit = async () => {
       try {
-        await makeRequest("POST", "/register-visit", { postId });
+        await makeRequest("POST", "/visit/register-visit", { postId, userId });
       } catch (error) {
         console.error("Error registering visit:", error);
       }
     };
-    const fetchImageName = async () => {
+    const fetchImage = async () => {
       if (picture) {
         try {
-          const image = await makeRequest("GET", `/images/${picture}`);
+          const image = await makeRequest("GET", `/image/${picture}`);
           setImage(image);
         } catch (error) {
           console.error("Error getting image", error);
@@ -66,7 +66,7 @@ function PostEditor({ postId }) {
     fetchPostDetails();
     isAdminResponse();
     registerVisit();
-    fetchImageName();
+    fetchImage();
   }, [picture, postId, userId]);
 
   const handleEdit = () => {

@@ -18,7 +18,7 @@ function PostForm({ initialData }) {
       setContent(initialData.content || "");
       setImage(initialData.picture || null);
       setMode("update");
-    }
+    } else setMode("create");
   }, [initialData]);
 
   const handleEditorChange = (value) => {
@@ -33,16 +33,11 @@ function PostForm({ initialData }) {
     e.preventDefault();
 
     try {
-      // If in create mode and an image is provided, upload the new image
       if (mode === "create" && image) {
         const formData = new FormData();
         formData.append("image", image);
 
-        const uploadResponse = await makeRequest(
-          "POST",
-          "/image/upload",
-          formData
-        );
+        const uploadResponse = await makeRequest("POST", "/image/", formData);
         console.log("Image", uploadResponse);
 
         const picture = uploadResponse._id;
@@ -54,7 +49,6 @@ function PostForm({ initialData }) {
           picture,
         });
       } else {
-        // If in update mode or no image provided during creation, update the post without changing the image
         const authorId = getCookie("user_forum");
         await makeRequest(
           "PUT",

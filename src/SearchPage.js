@@ -11,7 +11,7 @@ const SearchPage = () => {
   const handleSearch = (criteria, query) => {
     makeRequest("POST", `search/${criteria}`, { query })
       .then((response) => {
-        setResults(response.posts);
+        setResults(response);
       })
       .catch((error) => {
         console.error("Search error:", error);

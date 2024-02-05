@@ -6,6 +6,7 @@ import { getCookie, deleteCookie } from "./Cookie.js";
 import ImageViewer from "./Image.js";
 
 const ProfilePage = () => {
+  const userId = getCookie("user_forum");
   const [user, setUser] = useState(null);
   const [newAvatar, setNewAvatar] = useState(null);
   const [showChangeUsernameForm, setShowChangeUsernameForm] = useState(false);
@@ -22,14 +23,12 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userId = getCookie("user_forum");
-
         if (userId) {
           // Fetch user data
           const userDataResponse = await makeRequest("GET", `/users/${userId}`);
 
           // Update state with user data
-          setUser(userDataResponse);
+          setUser(userDataResponse.user);
 
           // Fetch user image
           const imageResponse = await makeRequest(
@@ -46,7 +45,7 @@ const ProfilePage = () => {
     };
 
     fetchData();
-  }, []);
+  }, [userId]);
 
   const handleModifyAvatar = async () => {
     if (!newAvatar) {
@@ -58,12 +57,12 @@ const ProfilePage = () => {
       formData.append("image", newAvatar);
 
       const uploadImageResponse = await makeRequest("POST", "/image", formData);
-
-      await makeRequest("PUT", `/users/${user.avatar}/avatar`, {
-        avatar: uploadImageResponse._id,
+      await makeRequest("PUT", `/users/${userId}/avatar`, {
+        newAvatar: uploadImageResponse._id,
       });
 
       await makeRequest("DELETE", `/image/${user.avatar}`);
+      window.location.reload();
     } catch (error) {
       console.error("Error modifying avatar:", error);
 
@@ -74,19 +73,16 @@ const ProfilePage = () => {
   };
 
   const handleModifyPassword = () => {
-    // Check if oldPassword is correct before modifying the password
     makeRequest("POST", `/users/${user._id}/checkPassword`, {
       password: oldPassword,
     })
       .then((response) => {
         const { isCorrect } = response;
         if (isCorrect) {
-          // Password is correct, proceed with modification
           makeRequest("PUT", `/users/${user._id}/password`, {
             newPassword,
           });
 
-          // Optionally, update the user state or UI here
           setShowChangePasswordForm(false);
         } else {
           console.error("Incorrect old password");
@@ -113,6 +109,7 @@ const ProfilePage = () => {
       .catch((error) => {
         console.error("Error checking username:", error);
       });
+    window.location.reload();
   };
 
   const handleModifyEmail = () => {
@@ -133,9 +130,9 @@ const ProfilePage = () => {
           console.error("Error checking email:", error);
         });
     } else {
-      // Email is unchanged or empty
       setShowChangeEmailForm(false);
     }
+    window.location.reload();
   };
 
   const navigate = useNavigate();
@@ -174,7 +171,6 @@ const ProfilePage = () => {
     <div className="profile-page-container">
       <h2>Welcome, {user.username}!</h2>
 
-      {/* Profile Picture */}
       <div>
         <ImageViewer imageData={image} id={"profil_image"} />
         <form>
@@ -188,7 +184,6 @@ const ProfilePage = () => {
         </form>
       </div>
 
-      {/* Change Username */}
       <div>
         <p>Username: {user.username}</p>
         {showChangeUsernameForm ? (
@@ -210,7 +205,6 @@ const ProfilePage = () => {
         )}
       </div>
 
-      {/* Change Email */}
       <div>
         <p>Email: {user.email}</p>
         {showChangeEmailForm ? (
@@ -232,7 +226,6 @@ const ProfilePage = () => {
         )}
       </div>
 
-      {/* Change Password */}
       <div>
         <p>Password:</p>
         {showChangePasswordForm ? (
@@ -260,7 +253,6 @@ const ProfilePage = () => {
         )}
       </div>
 
-      {/* Delete Account */}
       <div>
         <p>Delete Account:</p>
         {deleteConfirmation ? (

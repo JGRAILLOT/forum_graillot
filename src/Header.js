@@ -14,7 +14,7 @@ const Header = () => {
       try {
         if (userId) {
           const user = await makeRequest("GET", `/users/${userId}`);
-          const isAdmin = user.isAdmin;
+          const isAdmin = user.user.isAdmin;
           setIsAdmin(isAdmin);
         }
       } catch (error) {

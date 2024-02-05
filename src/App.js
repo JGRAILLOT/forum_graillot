@@ -1,4 +1,4 @@
-// Import necessary components and modules
+import "./App.css";
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./Header";
@@ -24,7 +24,7 @@ const App = () => {
           <Route path="/search" element={<SearchPage />} />
           <Route path="/login" element={<LoginPage />} />
           <Route path="/post/:postId" element={<PostPage />} />
-          <Route path="/user/:userId" element={<UserPage />} />
+          <Route path="/userTable" element={<UserPage />} />
           <Route path="/signup" element={<SignUpPage />} />
           <Route path="/profilepage" element={<ProfilePage />} />
         </Routes>

@@ -2,10 +2,8 @@
 import React from "react";
 
 const ImageViewer = ({ imageData, id }) => {
-  console.log(imageData);
-
   if (!imageData) {
-    return <p>Loading...</p>;
+    return null;
   }
 
   const imageUrl = "http://localhost:3000/uploads/" + imageData.filename;

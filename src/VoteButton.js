@@ -1,7 +1,7 @@
 // VoteButton.js
 import React, { useState, useEffect } from "react";
 import { getCookie } from "./Cookie.js";
-import { makeRequest } from "./Api.js";
+import makeRequest from "./Api.js";
 
 const VoteButton = ({ postId }) => {
   const userId = getCookie("user_forum");
@@ -34,6 +34,11 @@ const VoteButton = ({ postId }) => {
       } else {
         await makeRequest("POST", "/votes", { postId, userId, value });
       }
+      const updatedVoteCount = await makeRequest(
+        "get",
+        `/votes/count/${postId}`
+      );
+      setVoteCount(updatedVoteCount.voteCount);
     } catch (error) {
       console.error("Error handling vote:", error);
     }

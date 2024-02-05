@@ -39,7 +39,9 @@ const UserTable = () => {
   };
   const handleToggleDisable = async (userId) => {
     try {
-      await makeRequest("put", `/users/${userId}/disable`);
+      const user = await makeRequest("GET", `/users/${userId}`);
+      const disable = user.user.disabled;
+      await makeRequest("put", `/users/${userId}/disable`, !disable);
       setUsers((prevUsers) =>
         prevUsers.map((user) =>
           user._id === userId ? { ...user, disabled: !user.disabled } : user
@@ -66,8 +68,8 @@ const UserTable = () => {
           <tr key={user._id}>
             <td>{user.username}</td>
             <td>{user.email}</td>
-            <td>{user.disable}</td>
             <td>{user.isAdmin ? "Yes" : "No"}</td>
+            <td>{user.disabled ? "Yes" : "No"}</td>
             <td>
               <button onClick={() => handleBan(user._id)}>Ban</button>
               <button onClick={() => handlePromote(user._id)}>Promote</button>

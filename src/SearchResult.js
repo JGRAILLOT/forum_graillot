@@ -2,10 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 const SearchResults = ({ results }) => {
-  // Check if results is undefined or not an array
   if (!results || !Array.isArray(results)) {
     return <p>No search results available</p>;
   }
+  console.log(results);
 
   return (
     <div>
@@ -13,7 +13,7 @@ const SearchResults = ({ results }) => {
       <ul>
         {results.map((post) => (
           <li key={post.postId}>
-            <Link to={`/post/${post.postId}`}>{post.title}</Link>
+            <Link to={`/post/${post._id}`}>{post.title}</Link>
           </li>
         ))}
       </ul>
